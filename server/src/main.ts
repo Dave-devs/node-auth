@@ -1,15 +1,17 @@
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import { connectDB } from "./database/connectDB";
 import config from "./utils/config";
+import { authRouter } from './routes/auth.routes';
+import cors from 'cors';
 
-const PORT = config.port;
 
 const app: Application = express();
+const PORT = config.port;
 
-app.get("/", (req: Request, res: Response) => {
-  console.log('Hello World!');
-  res.send('Hello World!');
-});
+app.use(cors({ origin: `${config.origin}`, credentials: true }));
+app.use(express.json());
+app.use('/api/auth', authRouter);
+
 
 app.listen(config.port, () => {
     connectDB();
